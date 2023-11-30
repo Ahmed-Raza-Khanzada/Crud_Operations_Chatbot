@@ -241,14 +241,26 @@ If you are unsure or lack information about a particular query, refrain from gen
         elif chat_history[-1].content.lower().strip() == 'update_category':
             print("********************************Update Categories*********************************")
             if user_email==None:
-                response1 = "Bot: To update your categories please provide your email?"
-                print(response1+"\n"+"-"*10)
-                user_answer = input("You: ")
-                email = None
-                r = find_email(user_answer)
-                if r!=None:
-                    user_email = r
-                    email = r
+                while True:
+                    response1 = "Bot: To update your categories please provide your email?"
+                    print(response1+"\n"+"-"*10)
+                    user_answer = input("You: ")
+                    email = None
+                    r = find_email(user_answer)
+                    if r!=None:
+                        response1 = f"Bot: is this email is correct or not?\n{r}\nPlease only answer in 'yes' or 'no'"
+                        print(response1+"\n"+"-"*10)
+                        user_answer = input("You: ")
+                        if user_answer.strip().lower() == 'yes':
+                            user_email = r
+                            email = r
+                            break
+                        elif user_answer.strip().lower() == 'no':
+                            continue
+                        else:
+                            already_answr = True
+                            break
+                    
             else:
                 email = user_email
             if email!= None:
@@ -302,15 +314,25 @@ If you are unsure or lack information about a particular query, refrain from gen
         elif chat_history[-1].content.lower().strip() == 'my_categories':
             print("********************************My Categories*********************************")
             if user_email==None:
-                response1 = "Bot: To check your categories please provide your email?"
-                print(response1+"\n"+"-"*10)
-                user_answer = input("You: ")
-                
-                r = find_email(user_answer)
-                email = None
-                if r!=None:
-                    user_email = r
-                    email = r
+                while True:
+                    response1 = "Bot: To update your categories please provide your email?"
+                    print(response1+"\n"+"-"*10)
+                    user_answer = input("You: ")
+                    email = None
+                    r = find_email(user_answer)
+                    if r!=None:
+                        response1 = f"Bot: is this email is correct or not?\n{r}\nPlease only answer in 'yes' or 'no'"
+                        print(response1+"\n"+"-"*10)
+                        user_answer = input("You: ")
+                        if user_answer.strip().lower() == 'yes':
+                            user_email = r
+                            email = r
+                            break
+                        elif user_answer.strip().lower() == 'no':
+                            continue
+                        else:
+                            already_answr = True
+                            break
             else:
                 email = user_email
 
@@ -331,15 +353,25 @@ If you are unsure or lack information about a particular query, refrain from gen
         elif chat_history[-1].content.lower().strip() == 'remove_categories':
             print("********************************Remove Categories*********************************")
             if user_email==None:
-                response1 = "Bot: To remove your categories please provide your email?"
-                print(response1+"\n"+"-"*10)
-                user_answer = input("You: ")
-                
-                r = find_email(user_answer)
-                email = None
-                if r!=None:
-                    user_email = r
-                    email = r
+                while True:
+                    response1 = "Bot: To update your categories please provide your email?"
+                    print(response1+"\n"+"-"*10)
+                    user_answer = input("You: ")
+                    email = None
+                    r = find_email(user_answer)
+                    if r!=None:
+                        response1 = f"Bot: is this email is correct or not?\n{r}\nPlease only answer in 'yes' or 'no'"
+                        print(response1+"\n"+"-"*10)
+                        user_answer = input("You: ")
+                        if user_answer.strip().lower() == 'yes':
+                            user_email = r
+                            email = r
+                            break
+                        elif user_answer.strip().lower() == 'no':
+                            continue
+                        else:
+                            already_answr = True
+                            break
             else:
                 email = user_email
 

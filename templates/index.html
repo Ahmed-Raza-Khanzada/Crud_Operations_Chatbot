@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Bot Interface</title>
+    <style>
+        /* Add some basic styling for the chat messages */
+        #chat-container {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+
+        .message {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Chat Bot Interface</h1>
+    <div id="chat-container">
+        {% for message in chat_history %}
+            <p class="message">You said: {{ message.user_input }}</p>
+            <p class="message">Bot: {{ message.bot_response }}</p>
+        {% endfor %}
+    </div>
+    <form id="chat-form" method="post" action="/get_response">
+        <label for="user_input">You:</label>
+        <input type="text" id="user_input" name="user_input" required>
+        <input type="submit" value="Send">
+    </form>
+
+    <script>
+        // Add JavaScript to scroll to the bottom of the chat container
+        function scrollToBottom() {
+            var chatContainer = document.getElementById('chat-container');
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        // Call scrollToBottom on page load
+        window.onload = scrollToBottom;
+
+        // Call scrollToBottom when a new message is added
+        var form = document.getElementById('chat-form');
+        form.addEventListener('submit', function() {
+            setTimeout(scrollToBottom, 0);  // Timeout to allow time for new message to render
+        });
+    </script>
+</body>
+</html>
