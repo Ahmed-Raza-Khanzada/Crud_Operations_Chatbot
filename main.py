@@ -4,7 +4,7 @@ from langchain.vectorstores import FAISS
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
 from call_data_apis import create_user_api, remove_update_category_api
-from utils import find_email, check_email, get_availaible_categories
+from utils import find_email, check_email, get_availaible_categories,check_email_validity
 import os
 
 import re
@@ -223,9 +223,7 @@ If you are unsure or lack information about a particular query, refrain from gen
         # Process user input and get the bot's response
         response = conversation_chain({'question': user_answer})
         chat_history = response['chat_history']
-
-        # print("CHat Historrrrrrrrrrrrrrrry")
-        # print(chat_history)
+      
         if chat_history[-1].content.lower().strip() == 'create_account':
             print("********************************Create Account*********************************")
 
@@ -245,21 +243,15 @@ If you are unsure or lack information about a particular query, refrain from gen
                     response1 = "Bot: To update your categories please provide your email?"
                     print(response1+"\n"+"-"*10)
                     user_answer = input("You: ")
-                    email = None
-                    r = find_email(user_answer)
-                    if r!=None:
-                        response1 = f"Bot: is this email is correct or not?\n{r}\nPlease only answer in 'yes' or 'no'"
-                        print(response1+"\n"+"-"*10)
-                        user_answer = input("You: ")
-                        if user_answer.strip().lower() == 'yes':
-                            user_email = r
-                            email = r
-                            break
-                        elif user_answer.strip().lower() == 'no':
-                            continue
-                        else:
-                            already_answr = True
-                            break
+                    
+                    mail,already_answr,action = check_email_validity(user_answer)
+                    if mail!=None:
+                        user_email = mail
+                        email = mail
+                    if action=="break":
+                        break
+                    elif action=="continue":
+                        continue
                     
             else:
                 email = user_email
@@ -318,21 +310,14 @@ If you are unsure or lack information about a particular query, refrain from gen
                     response1 = "Bot: To update your categories please provide your email?"
                     print(response1+"\n"+"-"*10)
                     user_answer = input("You: ")
-                    email = None
-                    r = find_email(user_answer)
-                    if r!=None:
-                        response1 = f"Bot: is this email is correct or not?\n{r}\nPlease only answer in 'yes' or 'no'"
-                        print(response1+"\n"+"-"*10)
-                        user_answer = input("You: ")
-                        if user_answer.strip().lower() == 'yes':
-                            user_email = r
-                            email = r
-                            break
-                        elif user_answer.strip().lower() == 'no':
-                            continue
-                        else:
-                            already_answr = True
-                            break
+                    mail,already_answr,action = check_email_validity(user_answer)
+                    if mail!=None:
+                        user_email = mail
+                        email = mail
+                    if action=="break":
+                        break
+                    elif action=="continue":
+                        continue
             else:
                 email = user_email
 
@@ -357,21 +342,14 @@ If you are unsure or lack information about a particular query, refrain from gen
                     response1 = "Bot: To update your categories please provide your email?"
                     print(response1+"\n"+"-"*10)
                     user_answer = input("You: ")
-                    email = None
-                    r = find_email(user_answer)
-                    if r!=None:
-                        response1 = f"Bot: is this email is correct or not?\n{r}\nPlease only answer in 'yes' or 'no'"
-                        print(response1+"\n"+"-"*10)
-                        user_answer = input("You: ")
-                        if user_answer.strip().lower() == 'yes':
-                            user_email = r
-                            email = r
-                            break
-                        elif user_answer.strip().lower() == 'no':
-                            continue
-                        else:
-                            already_answr = True
-                            break
+                    mail,already_answr,action = check_email_validity(user_answer)
+                    if mail!=None:
+                        user_email = mail
+                        email = mail
+                    if action=="break":
+                        break
+                    elif action=="continue":
+                        continue
             else:
                 email = user_email
 

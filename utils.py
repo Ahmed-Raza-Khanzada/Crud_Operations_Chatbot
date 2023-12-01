@@ -9,6 +9,25 @@ def find_email(input_string):
         return match.group()
     else:
         return None
+def check_email_validity(user_answer):
+    email = None
+    r = find_email(user_answer)
+    if r!=None:
+        response1 = f"Bot: is this email is correct or not?\n{r}\nPlease only answer in 'yes' or 'no'"
+        print(response1+"\n"+"-"*10)
+        user_answer = input("You: ")
+        if user_answer.strip().lower() == 'yes':
+            user_email = r
+            email = r
+            action = "break"
+        elif user_answer.strip().lower() == 'no':
+            action ="continue"
+        else:
+            already_answr = True
+            action = "break"
+        return email,already_answr,action
+    else:
+        return email,False,"continue"
 
 def check_email(email):
     email_to_check = email
