@@ -74,3 +74,6 @@ print(bot_response_1)
 user_question_2 = "What categories are available?"
 bot_response_2 = chat_function(user_question_2)
 print(bot_response_2)
+
+
+

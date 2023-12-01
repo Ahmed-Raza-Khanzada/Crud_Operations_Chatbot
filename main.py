@@ -80,38 +80,14 @@ def Create_Account(categories_names,categories):
                                 flag = True
                                 my_flag = True
                                 break
-                            elif "name" in user_answer.strip().lower() and "email" in user_answer.strip().lower() and "categories" in user_answer.strip().lower():
-                                record_reponse_create_account["name"] = None
-                                record_reponse_create_account["email"] = None
-                                record_reponse_create_account["categories"] = None
+                            if any(keyword in user_answer for keyword in ["name", "email", "categories"]):
+                                for key in ["name", "email", "categories"]:
+                                    if key in user_answer:
+                                        record_reponse_create_account[key] = None
                                 my_flag = True
                                 break
-                            elif "name" in user_answer.strip().lower() and "email" in user_answer.strip().lower() :
-                                record_reponse_create_account["name"] = None
-                                record_reponse_create_account["email"] = None
-                                my_flag = True
-                                break
-                            elif "name" in user_answer.strip().lower() and "categories" in user_answer.strip().lower() :
-                                record_reponse_create_account["name"] = None
-                                record_reponse_create_account["categories"] = None
-                                my_flag = True
-                                break
-                            elif "email" in user_answer.strip().lower() and "categories" in user_answer.strip().lower() :
-                                record_reponse_create_account["email"] = None
-                                record_reponse_create_account["categories"] = None
-                                my_flag = True
-                                break
-                            elif user_answer.strip().lower() == 'name':
-
-                                record_reponse_create_account["name"] = None
-                                my_flag = True
-                                break
-                            elif user_answer.strip().lower() == 'email':
-                                record_reponse_create_account["email"] = None
-                                my_flag = True
-                                break
-                            elif user_answer.strip().lower() == 'categories':
-                                record_reponse_create_account["categories"] = None
+                            elif user_answer in ["name", "email", "categories"]:
+                                record_reponse_create_account[user_answer] = None
                                 my_flag = True
                                 break
                             else:
