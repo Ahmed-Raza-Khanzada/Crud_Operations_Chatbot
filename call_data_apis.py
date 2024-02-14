@@ -19,10 +19,8 @@ def call_get_email_api(email):
 
     try:
         response = requests.get(api_url)
-       
         exists_status = response.json()
         return exists_status
-
     except Exception as e:
         print(f"An error occurred: {e}")
         return None
@@ -41,6 +39,8 @@ def get_category_data(api_url):
         print(f"An error occurred: {e}")
         return None
 
+def get_user_categories_api_update(usreName:str,email:str)->dict:
+    return { "My_user":validate_user(usreName), "My_email":validate_email(email)}
 
 def remove_update_category_api(input_data,remove=False):
     if remove:

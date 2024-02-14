@@ -1,0 +1,283 @@
+<head>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<style>
+    .chat-header {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+    
+        .logo-img {
+                width: 50px; /* Adjust the width as needed */
+                height: 50px; /* Adjust the height as needed */
+                margin-right: 10px;
+            }
+    
+        body {
+            border: 1px solid #ccc;
+            padding: 20px;
+            background-color: #fff; /* Light mode background color */
+            color: #333; /* Light mode text color */
+        }
+        .large-textarea {
+            height: 150px; /* Adjust the height as needed */
+        }
+        .dark-mode body {
+            background-color: #333; /* Dark mode background color */
+            color: #fff; /* Dark mode text color */
+        }
+        .container {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(5, 14, 146, 0.1);
+            background-color: #fff; /* Light mode background color */
+        }
+        .dark-mode .container {
+            background-color: #333; /* Dark mode background color */
+        }
+        .chat-body {
+            padding: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+            background-color: #F7F7F7; /* Light mode chat body background color */
+        }
+        .dark-mode .chat-body {
+            background-color: #444; /* Dark mode chat body background color */
+        }
+        .message {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        .avatar {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+        }
+        /* Style for user's questions */
+        .user-message .message-text {
+            background-color: #007BFF;
+            color: #fff;
+            align-self: flex-end;
+            max-width:48%;
+        }
+        /* Style for bot's answers */
+        .bot-message .message-text {
+            background-color: #F7F7F7;
+            color: #333;
+            align-self: flex-start;
+            max-width: 48%;
+            
+        }
+        .message-text {
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            flex: 1;
+        }
+        .user-message {
+            justify-content: flex-end;
+            align-self: flex-end;
+            margin-left: auto;
+        }
+        .bot-message {
+            justify-content: flex-start;
+            align-self: flex-start;
+            margin-right: auto;
+ 
+        }
+        .chat-footer {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+        .custom-input {
+            border: 2px solid #007BFF;
+            border-radius: 8px;
+            padding: 15px;
+            width: 100%;
+        }
+        #getResponseButton {
+            padding: 5px 10px;
+            font-size: 12px;
+            background: none;
+            border: none;
+            color: black; /* Set the initial button color to black */
+        }
+        .like-dislike-buttons {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .like-button, .dislike-button {
+            font-size: 24px;
+            margin: 0 10px;
+            background: none;
+            border: none;
+            color: #333;
+        }
+        .chat-header {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css"
+    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous" />
+</head>
+
+<body>
+    <div class="chat-header">
+        <img class="logo-img" src="/static/liqteq2.jpg" alt="Logo">
+        Liquid Technology Chatbot
+    </div>
+
+    <div class="chat-body" id="chatBody">
+        <!-- This is where the chat messages will be displayed. -->
+    </div>
+    <div class="chat-footer">
+        <div class="container-flud">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12 form-group">
+                        <textarea id="questionInput" class="form-control custom-input large-textarea"
+                            placeholder="Enter your question" style="width: 100%; height: 200px;"></textarea>
+                    </div>
+                    <div class="col-12 form-group">
+                        <button id="getResponseButton" class="fa fa-telegram"
+                            style="font-size: 48px; color: inherit; margin-top: 10px;"></button><br />
+                    </div>
+                </div>
+            </div>
+        </div>
+    <div id="statusMessage" style="display: none;"></div>
+
+<script>
+    $(document).ready(function () {
+        var flag = true;
+        var arr = [];
+        var  myvar =""
+        var likedMessages = [];
+        var dislikedMessages = [];
+        var chathistory = "";
+        // Hide like and dislike buttons by default
+        hideLikeDislikeButtons();
+        $("#questionInput").keypress(function (event) {
+            if (event.which === 13) {
+                // If the Enter key is pressed
+                event.preventDefault(); // Prevent the default form submission
+                // Trigger the click event of the Get Response button
+                $("#getResponseButton").click();
+            }
+        });
+        $("#getResponseButton").click(function () {
+            // Disable the button during the request
+            $("#getResponseButton").prop("disabled", true);
+            // Show loading indicator
+            showStatusMessage("Loading...", true);
+            var question = $("#questionInput").val();
+            arr.push({ "role": "user", "content": question });
+                myvar = question;
+                chathistory+="\n\nCustomer: " +question;
+
+                var data = {
+                    flag1: flag,
+                    message: chathistory,
+                };
+                // Make an AJAX request to the controller action
+                $.ajax({
+                    url: "/get_response",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify(data),
+                    success: function (result) {
+                        // Handle the response from the server, e.g., display it in the chat
+                        appendBotMessageWithAnimation(result.response);
+                        // Enable the button after the request is complete
+                        $("#getResponseButton").prop("disabled", false);
+                        arr.push({ "role": "assistant", "content": result.response });
+                        myvar = myvar + "\n\n\nassitant" + result.response
+                        // Show like and dislike buttons after the first click
+                        chathistory+="\n\nLiqChat: " +result.response;
+
+                        console.log(myvar)
+                        showLikeDislikeButtons();
+                    },
+                    error: function (error) {
+                        console.error("Error:", error);
+                        showStatusMessage("Failed to get response from the server.", false);
+                        // Enable the button after the request is complete
+                        $("#getResponseButton").prop("disabled", false);
+                    }
+                });
+                // Clear input fields
+                clearInputFields();
+                // Append the user message to the chat
+                appendUserMessageWithAnimation(question);
+            });
+            $("#likeButton").click(function () {
+                handleLike();
+            });
+            $("#dislikeButton").click(function () {
+                handleDislike();
+            });
+            function clearInputFields() {
+                $("#questionInput").val('');
+            }
+            function appendUserMessageWithAnimation(message) {
+                var userMessage = '<div class="message user-message" style="display: none;">' +
+                    '<div class="message-text">' + message + '</div>' +
+                    '</div>';
+                    $("#chatBody").append(userMessage);
+                    $(".user-message").fadeIn(500);
+                }
+                function appendBotMessageWithAnimation(message) {
+                    var botMessage = '<div class="message bot-message" style="display: none;">' +
+                        '<div class="message-text" style="background: Gray; color:white;">' + message + '</div>' +
+                        '</div>' +
+                        '<div class="like-dislike-buttons">' +
+                            '<button id="likeButton" class="like-button"></button>' +
+                    '<button id="dislikeButton" class="dislike-button"></button>' +
+                    '</div>';
+                $("#chatBody").append(botMessage);
+                $(".bot-message").fadeIn(500);
+            }
+            function showStatusMessage(message, isSuccess) {
+                var statusMessage = $("#statusMessage");
+                statusMessage.text(message);
+                statusMessage.css("color", isSuccess ? "green" : "red");
+                statusMessage.show();
+                setTimeout(function () {
+                    statusMessage.hide();
+                }, 3000);
+            }
+            function showLikeDislikeButtons() {
+                $("#likeDislikeButtons").show();
+            }
+            function hideLikeDislikeButtons() {
+                $("#likeDislikeButtons").hide();
+            }
+            function handleLike() {
+                var lastBotMessage = arr[arr.length - 1];
+                likedMessages.push(lastBotMessage);
+                showStatusMessage("You liked the response!", true);
+                hideLikeDislikeButtons();
+            }
+            function handleDislike() {
+                var lastBotMessage = arr[arr.length - 1];
+                dislikedMessages.push(lastBotMessage);
+                showStatusMessage("You disliked the response!", false);
+                hideLikeDislikeButtons();
+            }
+        });
+        </script>
+
+</body>

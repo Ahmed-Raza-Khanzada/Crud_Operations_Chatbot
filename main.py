@@ -6,7 +6,6 @@ from langchain.chains import ConversationalRetrievalChain
 from call_data_apis import create_user_api, remove_update_category_api
 from utils import find_email, check_email, get_availaible_categories,check_email_validity
 import os
-
 import re
 os.environ['GOOGLE_API_KEY'] =  'AIzaSyAJuIFT_1XfowTRQH_qP5VC9ip8VTdyNKs'
 
